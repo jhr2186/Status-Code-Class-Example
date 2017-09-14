@@ -13,10 +13,17 @@ const success = (request, response) => {
 };
 
 const badRequest = (request, response, params) => {
-  const responseJSON = {
-    message: 'This request has the required parameters',
-  };
-
+    const responseJSON = {
+        message: 'This request has the required parameters',
+    };
+    
+    if(!params.valid || params.valid !== 'true'){
+        responseJSON.message = "missing valid query params. Needs to be true.";
+        responseJSON.id = 'badRequest';
+        return respondJSON(request, response, 400, responseJSON);
+    }
+    
+    return respondJSON(response, request, 200, responseJSON);
 };
 
 const notFound = (request, response) => {
@@ -24,7 +31,7 @@ const notFound = (request, response) => {
     message: 'The page you are looking for was not found.',
     id: 'notFound',
   };
-
+    respondJSON(request, response, 404, responseJSON);
 };
 
 module.exports = {
